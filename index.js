@@ -13,9 +13,9 @@ function addBookToLibrary(title, author, pages, read){
     myLibrary.push(newBook);
 }
 
-addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true);
-addBookToLibrary("1984", "George Orwell", 328, false);
-console.log(myLibrary);
+// addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true);
+// addBookToLibrary("1984", "George Orwell", 328, false);
+// console.log(myLibrary);
 
 function displayBooks(){
     const tableBody=document.getElementById("books-table-body");
@@ -32,6 +32,7 @@ function displayBooks(){
         <td>${book.read ? 'Yes' : 'No'}</td>
         <td>
             <button class="remove-btn">Remove</button>
+            <button class="toggle-read">Mark as Read</button>
         </td>
         `;
         tableBody.appendChild(row);
@@ -62,3 +63,23 @@ bookForm.addEventListener("submit", (e)=> {
     bookForm.reset();
     dialog.close();
 })
+
+document.addEventListener("click", (e)=>{
+    if(e.target.classList.contains('remove-btn')){
+        const bookId=e.target.closest('tr').getAttribute('data-book-id');
+        const bookIndex=myLibrary.findIndex(book => book.id === bookId);
+        if(bookIndex!==-1){
+            myLibrary.splice(bookIndex, 1);
+        }
+        displayBooks();
+    }
+    if(e.target.classList.contains('toggle-read')){
+        const bookId=e.target.closest('tr').getAttribute('data-book-id');
+        const book=myLibrary.find(book=> book.id===bookId);
+
+        if(book){
+            book.read=!book.read;
+        }
+        displayBooks();
+    }
+});
