@@ -16,3 +16,49 @@ function addBookToLibrary(title, author, pages, read){
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true);
 addBookToLibrary("1984", "George Orwell", 328, false);
 console.log(myLibrary);
+
+function displayBooks(){
+    const tableBody=document.getElementById("books-table-body");
+    tableBody.innerHTML=''
+    
+    myLibrary.forEach(book =>{
+        const row=document.createElement('tr');
+        row.setAttribute('data-book-id', book.id);
+
+        row.innerHTML=`
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.pages}</td>
+        <td>${book.read ? 'Yes' : 'No'}</td>
+        <td>
+            <button class="remove-btn">Remove</button>
+        </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+const dialog=document.querySelector("#book-dialog");
+const showButton=document.querySelector(".new-book");
+const bookForm=document.querySelector("#book-form");
+const cancelBtn=document.querySelector("#cancel-btn");
+
+showButton.addEventListener("click", () => {
+    dialog.showModal();
+});
+
+cancelBtn.addEventListener("click", () => {
+    dialog.close();
+});
+
+bookForm.addEventListener("submit", (e)=> {
+    e.preventDefault();
+    const title=document.getElementById('title').value;
+    const author=document.getElementById('author').value;
+    const pages=document.getElementById('pages').value;
+    const read=document.getElementById('read').checked;
+    addBookToLibrary(title, author, pages, read);
+    displayBooks();
+    bookForm.reset();
+    dialog.close();
+})
