@@ -9,6 +9,10 @@ function Book(title, author, pages, read){
 }
 
 function addBookToLibrary(title, author, pages, read){
+    if (!validateBookInput()) {
+        // Validation failed - browser will show error messages
+        return false;
+    }
     const newBook=new Book(title, author, pages, read);
     myLibrary.push(newBook);
 }
@@ -83,3 +87,33 @@ document.addEventListener("click", (e)=>{
         displayBooks();
     }
 });
+
+function validateBookInput(){
+    const titleInput = document.getElementById('title');
+    const authorInput = document.getElementById('author');
+    const pagesInput = document.getElementById('pages');
+    let isValid = true;
+    if(!titleInput.checkValidity()){
+        titleInput.setCustomValidity('Please enter a book title');
+        isValid=false;
+    } else{
+        titleInput.setCustomValidity('');
+    }
+    if(!authorInput.checkValidity()){
+        authorInput.setCustomValidity('Please enter a book title');
+        isValid=false;
+    } else{
+        authorInput.setCustomValidity('');
+    }
+    if(!pagesInput.checkValidity()){
+        if(pagesInput.validity.valueMissing()){
+            pagesInput.setCustomValidity('Please enter no. of pages');
+        } else if(pagesInput.validity.rangeUnderflow()){
+            pagesInput.setCustomValidity('Minimum no. of pages should be 1');
+        } 
+        return isValid=false;
+    } else{
+        pagesInput.setCustomValidity('');
+    }
+    return isValid;
+}
